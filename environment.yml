@@ -1,0 +1,7 @@
+name: ur3_blockpush
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - uv

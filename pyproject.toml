@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ur3-blockpush-inference"
+version = "0.1.0"
+description = "QFAT UR3 block-pushing simulator with a VersatIL inference server."
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "numpy<2",
+    "scipy",
+    "gym==0.25.2",
+    "gymnasium==0.29.1",
+    "mujoco==3.1.6",
+    "glfw",
+    "pyzmq",
+    "opencv-python-headless",
+    "draccus",
+    "wandb",
+    "tso-robotics-sockets",
+    "versatil-constants>=0.2.1",
+]
+
+[tool.setuptools.packages.find]
+include = ["versatil_inference*", "ur3_sim*", "gym_custom*"]
+
+[tool.setuptools.package-data]
+gym_custom = [
+    "envs/**/*.json",
+    "envs/**/*.mtl",
+    "envs/**/*.obj",
+    "envs/**/*.pkl",
+    "envs/**/*.png",
+    "envs/**/*.stl",
+    "envs/**/*.xml",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
