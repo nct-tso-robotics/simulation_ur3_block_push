@@ -1,20 +1,30 @@
-# UR3 BlockPush Inference Environment
+# UR3 Block Push Inference Server for VersatIL
 
-This repository vendors the QFAT UR3 simulator code under `gym_custom/` and
-adds a VersatIL-compatible `versatil_inference` socket server, matching the
-layout used by the local `pusht`, `blockpush`, and `kitchen` evaluation
-repositories.
+Standalone simulation server for evaluating VersatIL policies on the QFAT UR3
+Block Push task. A VersatIL client process connects over ZMQ, receives
+low-dimensional state observations, and sends back 2D end-effector target
+actions; the server drives the simulator, records rollouts, and computes
+evaluation metrics.
 
 The simulator dynamics and task logic are based on QFAT's
-`qfat.environments.ur3.ur3_wrapper.UR3Wrapper`. The VersatIL boundary uses raw
-state/action values by default, because VersatIL normalizes observations and
-unnormalizes actions inside the policy client before sending actions to the
-environment server.
+`qfat.environments.ur3.ur3_wrapper.UR3Wrapper`, vendored under `gym_custom/`.
+The `versatil_inference/` package is only the environment-side wrapper. The
+policy client lives in the VersatIL codebase and is run with
+`python -m versatil.endpoints.test`.
 
-## Installation
+The server uses raw simulator state/action values by default, because VersatIL
+normalizes observations and unnormalizes actions inside the policy client before
+sending actions to the environment server.
 
-Install Miniforge with `mamba` available if needed:
-https://github.com/conda-forge/miniforge
+## Layout
+
+- `gym_custom/` - UR3 simulator code and assets adapted from QFAT.
+- `versatil_inference/` - ZMQ server, parallel episode manager, rollout
+  recorder, and evaluation entry point.
+
+## Install
+
+Install Miniforge with `mamba` available if needed.
 
 ```bash
 cd /mnt/cluster/workspaces/mazzalore/ur3_blockpush
@@ -24,7 +34,7 @@ mamba run -n ur3_blockpush bash -lc \
 ```
 
 `uv sync` installs `versatil-constants>=0.2.1`, which provides the shared
-UR3 wire protocol constants used by the server.
+UR3 wire protocol constants used by both this server and VersatIL.
 
 For headless rendering, set the MuJoCo backend before running:
 
@@ -32,7 +42,7 @@ For headless rendering, set the MuJoCo backend before running:
 export MUJOCO_GL=egl
 ```
 
-## Run Evaluation
+## Run
 
 Start the simulator server:
 
@@ -47,10 +57,10 @@ python -m versatil_inference.run_evaluation \
   --use_wandb false
 ```
 
-Then run the VersatIL policy client from `surg-il` against that server:
+Then run the policy client from the VersatIL checkout against that server:
 
 ```bash
-cd /mnt/cluster/workspaces/mazzalore/surg-il
+cd /path/to/VersatIL
 mamba run -n versatil python -m versatil.endpoints.test \
   --checkpoint_path /path/to/checkpoint_dir \
   --checkpoint_name latest-999.ckpt \
@@ -63,6 +73,19 @@ mamba run -n versatil python -m versatil.endpoints.test \
 Use `--record_video true` on the server if rollout AVI files are needed.
 Trajectory CSV files and `results.csv` are always written under the configured
 `output_folder`.
+
+## Wire Protocol
+
+Observation keys match the VersatIL UR3 configs:
+
+| Key | Shape | Source |
+|---|---:|---|
+| `ur3_ee_pos` | `(2,)` | end-effector xy position |
+| `ur3_block1_pos` | `(2,)` | first block xy position |
+| `ur3_block2_pos` | `(2,)` | second block xy position |
+
+Actions are received as structured VersatIL action dictionaries and flattened
+to the raw `ur3_ee_target_action` 2D target before stepping the simulator.
 
 ## Metrics
 
