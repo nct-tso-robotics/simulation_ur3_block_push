@@ -1,13 +1,16 @@
 # UR3 Block Push Inference Server for VersatIL
 
-Standalone simulation server for evaluating VersatIL policies on the QFAT UR3
+Standalone simulation server for evaluating VersatIL policies on the UR3
 Block Push task. A VersatIL client process connects over ZMQ, receives
 low-dimensional state observations, and sends back 2D end-effector target
 actions; the server drives the simulator, records rollouts, and computes
 evaluation metrics.
 
-The simulator dynamics and task logic are based on QFAT's UR3 task, with the
-simulator code vendored under `gym_custom/`.
+The simulator dynamics and task logic are based on the UR3 environment released
+with VQ-BeT's `envs/ur3`, which traces back to Kim et al.,
+*Automating Reinforcement Learning with Example-Based Resets*, IEEE Robotics
+and Automation Letters, 2022. The simulator code is vendored under
+`gym_custom/`.
 This is a separate MuJoCo UR3 environment and is not derived from the IBC
 XArm BlockPush implementation.
 The `versatil_inference/` package is only the environment-side wrapper. The
@@ -20,7 +23,8 @@ sending actions to the environment server.
 
 ## Layout
 
-- `gym_custom/` - UR3 simulator code and assets adapted from QFAT.
+- `gym_custom/` - UR3 simulator code and assets adapted from VQ-BeT's UR3
+  environment.
 - `versatil_inference/` - ZMQ server, parallel episode manager, rollout
   recorder, and evaluation entry point.
 
@@ -29,7 +33,7 @@ sending actions to the environment server.
 Install Miniforge with `mamba` available if needed.
 
 ```bash
-cd /mnt/cluster/workspaces/mazzalore/ur3_blockpush
+cd ur3_blockpush
 mamba env create -f environment.yml
 mamba run -n ur3_blockpush bash -lc \
   'UV_PROJECT_ENVIRONMENT=$MAMBA_ROOT_PREFIX/envs/ur3_blockpush uv sync'
@@ -49,13 +53,13 @@ export MUJOCO_GL=egl
 Start the simulator server:
 
 ```bash
-cd /mnt/cluster/workspaces/mazzalore/ur3_blockpush
+cd ur3_blockpush
 mamba activate ur3_blockpush
 python -m versatil_inference.run_evaluation \
   --num_trials 50 \
   --max_parallel_envs 10 \
   --port 5556 \
-  --output_folder /mnt/cluster/workspaces/mazzalore/eval/ur3_blockpush \
+  --output_folder ./results/ur3_blockpush \
   --use_wandb false
 ```
 
@@ -106,7 +110,7 @@ The server reports:
   `ur3_ee_pos`, `ur3_block1_pos`, and `ur3_block2_pos`.
 - Action input is the raw 2D end-effector target for
   `ur3_ee_target_action`.
-- Optional QFAT-style normalized simulator I/O is still available through
+- Optional upstream-style normalized simulator I/O is still available through
   `--normalize_io true --stats_path /path/to/data_stats.json`, but this should
   not be used with standard VersatIL checkpoints unless you intentionally want
   to bypass the policy client's normalizer contract.
@@ -114,14 +118,19 @@ The server reports:
 ## Credits
 
 The UR3 task, `gym_custom/` simulator tree, and normalized wrapper convention
-are adapted from [ziyadsheeba/qfat](https://github.com/ziyadsheeba/qfat), the
-official implementation of *Quantization-Free Autoregressive Action
-Transformer*. Vendored UR driver components retain their original notices,
-including python-urx LGPL-3.0 files under
+are adapted from [jayLEE0301/vq_bet_official](https://github.com/jayLEE0301/vq_bet_official/tree/main/envs/ur3).
+The original UR3 environment should be cited as:
+Kim, J., Park, J. H., Cho, D., and Kim, H. J. *Automating Reinforcement
+Learning with Example-Based Resets*. IEEE Robotics and Automation Letters,
+7(3):6606-6613, 2022.
+
+Vendored UR driver components retain their original notices, including
+python-urx LGPL-3.0 files under
 `gym_custom/envs/real/ur/drivers/urx/` and MIT-licensed URplus driver files
 under `gym_custom/envs/real/ur/drivers/URplus/`.
 
 ## License
 
-This repository is distributed under Apache-2.0. Vendored third-party files may
-carry different file-level licenses; those notices are retained in place.
+This repository's VersatIL wrapper code is distributed under Apache-2.0.
+Vendored simulator and third-party files retain their original upstream terms;
+file-level notices are retained in place.

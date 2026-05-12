@@ -1,4 +1,4 @@
-"""Small normalizer copy compatible with QFAT's UR3 wrapper."""
+"""Small normalizer copy compatible with the upstream UR3 wrapper."""
 
 import json
 from pathlib import Path
@@ -17,7 +17,7 @@ class IdentityNormalizer:
 
 
 class MinMaxNormalizer:
-    """QFAT min-max normalizer for optional normalized action/state I/O."""
+    """Upstream min-max normalizer for optional normalized action/state I/O."""
 
     def __init__(self, normalize_actions_flag: bool = True):
         self.state_stats: dict = {}
@@ -45,4 +45,3 @@ class MinMaxNormalizer:
         min_value = np.asarray(self.action_stats["min"], dtype=np.float64)
         max_value = np.asarray(self.action_stats["max"], dtype=np.float64)
         return (normalized_action + 1) * (max_value - min_value + 1e-8) / 2 + min_value
-
