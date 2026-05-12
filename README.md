@@ -8,6 +8,8 @@ evaluation metrics.
 
 The simulator dynamics and task logic are based on QFAT's UR3 task, with the
 simulator code vendored under `gym_custom/`.
+This is a separate MuJoCo UR3 environment and is not derived from the IBC
+XArm BlockPush implementation.
 The `versatil_inference/` package is only the environment-side wrapper. The
 policy client lives in the VersatIL codebase and is run with
 `python -m versatil.endpoints.test`.
@@ -108,3 +110,18 @@ The server reports:
   `--normalize_io true --stats_path /path/to/data_stats.json`, but this should
   not be used with standard VersatIL checkpoints unless you intentionally want
   to bypass the policy client's normalizer contract.
+
+## Credits
+
+The UR3 task, `gym_custom/` simulator tree, and normalized wrapper convention
+are adapted from [ziyadsheeba/qfat](https://github.com/ziyadsheeba/qfat), the
+official implementation of *Quantization-Free Autoregressive Action
+Transformer*. Vendored UR driver components retain their original notices,
+including python-urx LGPL-3.0 files under
+`gym_custom/envs/real/ur/drivers/urx/` and MIT-licensed URplus driver files
+under `gym_custom/envs/real/ur/drivers/URplus/`.
+
+## License
+
+This repository is distributed under Apache-2.0. Vendored third-party files may
+carry different file-level licenses; those notices are retained in place.

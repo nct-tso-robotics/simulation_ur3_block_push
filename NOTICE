@@ -1,0 +1,19 @@
+UR3 Block Push simulation server
+
+This repository contains a VersatIL socket-server wrapper for the QFAT UR3
+Block Push task.
+
+Upstream components:
+- `gym_custom/` and the UR3 task logic are adapted from ziyadsheeba/qfat, the
+  official implementation of "Quantization-Free Autoregressive Action
+  Transformer".
+- This UR3 simulator is not derived from google-research/ibc's XArm BlockPush
+  environment.
+- `gym_custom/envs/real/ur/drivers/urx/` contains python-urx components under
+  LGPL-3.0; its `COPYING` file is retained.
+- `gym_custom/envs/real/ur/drivers/URplus/` contains components with MIT
+  license headers from Martin Huus Bjerge / Rope Robotics ApS.
+
+The repository-level Apache-2.0 license applies to wrapper/adaptation code
+contributed here unless a file-level or vendored upstream license states
+otherwise.
