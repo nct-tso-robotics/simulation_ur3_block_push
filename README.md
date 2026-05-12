@@ -6,8 +6,8 @@ low-dimensional state observations, and sends back 2D end-effector target
 actions; the server drives the simulator, records rollouts, and computes
 evaluation metrics.
 
-The simulator dynamics and task logic are based on QFAT's
-`qfat.environments.ur3.ur3_wrapper.UR3Wrapper`, vendored under `gym_custom/`.
+The simulator dynamics and task logic are based on QFAT's UR3 task, with the
+simulator code vendored under `gym_custom/`.
 The `versatil_inference/` package is only the environment-side wrapper. The
 policy client lives in the VersatIL codebase and is run with
 `python -m versatil.endpoints.test`.

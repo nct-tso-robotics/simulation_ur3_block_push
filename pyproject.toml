@@ -12,6 +12,8 @@ dependencies = [
     "scipy",
     "gym==0.25.2",
     "gymnasium==0.29.1",
+    "imageio",
+    "imageio-ffmpeg",
     "mujoco==3.1.6",
     "glfw",
     "pyzmq",

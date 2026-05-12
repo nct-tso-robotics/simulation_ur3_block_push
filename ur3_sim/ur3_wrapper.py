@@ -1,9 +1,9 @@
-"""QFAT UR3 block-pushing wrapper with raw VersatIL I/O.
+"""QFAT UR3 block-pushing simulator adapted to raw VersatIL I/O.
 
-The simulator setup mirrors QFAT's ``UR3Wrapper``.  The only default
-behavioral change is that observations/actions are raw simulator coordinates,
-because VersatIL checkpoints normalize incoming observations and unnormalize
-predicted actions before sending them over the socket.
+The simulator setup follows QFAT's UR3 task. The only default behavioral
+change is that observations/actions are raw simulator coordinates, because
+VersatIL checkpoints normalize incoming observations and unnormalize predicted
+actions before sending them over the socket.
 """
 
 import logging
@@ -24,6 +24,9 @@ logger = logging.getLogger(__name__)
 
 class UprightConstraint(NullObjectiveBase):
     """Keep the UR3 end effector upright during IK."""
+
+    def __init__(self) -> None:
+        pass
 
     def _evaluate(self, so3: np.ndarray) -> float:
         axis_desired = np.array([0, 0, -1])
@@ -202,7 +205,3 @@ class UR3BlockPushEnv(gym.Wrapper):
 
     def __getattr__(self, attrname: str):
         return getattr(self.env, attrname)
-
-
-UR3Wrapper = UR3BlockPushEnv
-
