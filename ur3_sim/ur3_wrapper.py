@@ -1,11 +1,9 @@
 """UR3 block-pushing simulator adapted to raw VersatIL I/O.
 
-The simulator setup follows the VQ-BeT UR3 environment, which traces back to
-Kim et al., "Automating Reinforcement Learning with Example-Based Resets".
-The only default behavioral change is that observations/actions are raw
-simulator coordinates, because VersatIL checkpoints normalize incoming
-observations and unnormalize predicted actions before sending them over the
-socket.
+The simulator setup follows the VQ-BeT UR3 environment. The only default
+behavioral change is that observations/actions are raw simulator coordinates,
+because VersatIL checkpoints normalize incoming observations and unnormalize
+predicted actions before sending them over the socket.
 """
 
 import logging

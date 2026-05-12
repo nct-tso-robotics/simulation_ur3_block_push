@@ -7,10 +7,7 @@ actions; the server drives the simulator, records rollouts, and computes
 evaluation metrics.
 
 The simulator dynamics and task logic are based on the UR3 environment released
-with VQ-BeT's `envs/ur3`, which traces back to Kim et al.,
-*Automating Reinforcement Learning with Example-Based Resets*, IEEE Robotics
-and Automation Letters, 2022. The simulator code is vendored under
-`gym_custom/`.
+with VQ-BeT's `envs/ur3`. The simulator code is vendored under `gym_custom/`.
 This is a separate MuJoCo UR3 environment and is not derived from the IBC
 XArm BlockPush implementation.
 The `versatil_inference/` package is only the environment-side wrapper. The
@@ -119,10 +116,6 @@ The server reports:
 
 The UR3 task, `gym_custom/` simulator tree, and normalized wrapper convention
 are adapted from [jayLEE0301/vq_bet_official](https://github.com/jayLEE0301/vq_bet_official/tree/main/envs/ur3).
-The original UR3 environment should be cited as:
-Kim, J., Park, J. H., Cho, D., and Kim, H. J. *Automating Reinforcement
-Learning with Example-Based Resets*. IEEE Robotics and Automation Letters,
-7(3):6606-6613, 2022.
 
 Vendored UR driver components retain their original notices, including
 python-urx LGPL-3.0 files under

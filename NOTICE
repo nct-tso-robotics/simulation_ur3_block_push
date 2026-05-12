@@ -6,9 +6,6 @@ Push task.
 Upstream components:
 - `gym_custom/` and the UR3 task logic are adapted from
   jayLEE0301/vq_bet_official/envs/ur3.
-- The original UR3 environment is from Kim, J., Park, J. H., Cho, D., and
-  Kim, H. J., "Automating Reinforcement Learning with Example-Based Resets",
-  IEEE Robotics and Automation Letters, 7(3):6606-6613, 2022.
 - This UR3 simulator is not derived from google-research/ibc's XArm BlockPush
   environment.
 - `gym_custom/envs/real/ur/drivers/urx/` contains python-urx components under
