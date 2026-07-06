@@ -12,7 +12,7 @@ This is a separate MuJoCo UR3 environment and is not derived from the IBC
 XArm BlockPush implementation.
 The `versatil_inference/` package is only the environment-side wrapper. The
 policy client lives in the VersatIL codebase and is run with
-`python -m versatil.endpoints.test`.
+`python -m versatil.endpoints.deploy`.
 
 The server uses raw simulator state/action values by default, because VersatIL
 normalizes observations and unnormalizes actions inside the policy client before
@@ -63,15 +63,17 @@ python -m versatil_inference.run_evaluation \
 Then run the policy client from the VersatIL checkout against that server:
 
 ```bash
-cd /path/to/VersatIL
-mamba run -n versatil python -m versatil.endpoints.test \
-  --checkpoint_path /path/to/checkpoint_dir \
-  --checkpoint_name latest-999.ckpt \
-  --model_server_address 127.0.0.1 \
-  --model_server_port 5556 \
-  --temporal_aggregation \
-  --max_steps 1000
+mamba run -n versatil python -m versatil.endpoints.deploy \
+  checkpoint_path=/path/to/checkpoint_dir \
+  checkpoint_name=latest-999.ckpt \
+  client.model_server_address=127.0.0.1 \
+  client.model_server_port=5556 \
+  client.temporal_aggregation=true \
+  max_steps=1000
 ```
+
+For the full client documentation, see the
+[VersatIL simulation evaluation tutorial](https://lorenzo-mazza.github.io/VersatIL/getting-started/inference/).
 
 Use `--record_video true` on the server if rollout AVI files are needed.
 Trajectory CSV files and `results.csv` are always written under the configured
